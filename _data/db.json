@@ -1,0 +1,108 @@
+{
+  "recipes": [
+    {
+      "id": "1",
+      "title": "Veggie Carbonara",
+      "image": "veggie_carbonara.jpg",
+      "time": 20,
+      "description": "A vegetarian twist on the classic Italian pasta dish with eggs, cheese, and vegetarian bacon.",
+      "vegan": false
+    },
+    {
+      "id": "2",
+      "title": "Veg Stir-Fry",
+      "image": "veg_stir_fry.jpg",
+      "time": 25,
+      "description": "A quick and healthy vegetarian stir-fry with fresh vegetables and tofu.",
+      "vegan": true
+    },
+    {
+      "id": "3",
+      "title": "Veg Alfredo",
+      "image": "veg_alfredo.jpg",
+      "time": 30,
+      "description": "A creamy and rich vegetarian Alfredo pasta made with cashew cream and fresh herbs.",
+      "vegan": false
+    },
+    {
+      "id": "4",
+      "title": "Vegan Tacos",
+      "image": "vegan_tacos.jpg",
+      "time": 15,
+      "description": "Delicious vegan tacos filled with black beans, avocado, and salsa.",
+      "vegan": true
+    },
+    {
+      "id": "5",
+      "title": "Mushroom Risotto",
+      "image": "mushroom_risotto.jpg",
+      "time": 40,
+      "description": "A rich and creamy risotto with sautéed mushrooms and Parmesan cheese.",
+      "vegan": false
+    },
+    {
+      "id": "6",
+      "title": "Chickpea Curry",
+      "image": "chickpea_curry.jpg",
+      "time": 35,
+      "description": "A fragrant and flavorful chickpea curry made with coconut milk and spices.",
+      "vegan": true
+    },
+    {
+      "id": "7",
+      "title": "Vegan Burger",
+      "image": "vegan_burger.jpg",
+      "time": 20,
+      "description": "A hearty and delicious vegan burger made with black beans, oats, and spices.",
+      "vegan": true
+    },
+    {
+      "id": "8",
+      "title": "Caprese Salad",
+      "image": "caprese_salad.jpg",
+      "time": 10,
+      "description": "A simple and fresh salad with mozzarella, tomatoes, and basil.",
+      "vegan": false
+    },
+    {
+      "id": "9",
+      "title": "Lentil Soup",
+      "image": "lentil_soup.jpg",
+      "time": 45,
+      "description": "A hearty and comforting soup made with lentils, carrots, and spices.",
+      "vegan": true
+    },
+    {
+      "id": "10",
+      "title": "Vegan Pancakes",
+      "image": "vegan_pancakes.jpg",
+      "time": 15,
+      "description": "Fluffy and light vegan pancakes made with almond milk and whole wheat flour.",
+      "vegan": true
+    },
+    {
+      "id": "",
+      "title": "French Cuisine",
+      "image": "image",
+      "time": 60,
+      "description": "A great dish of various intense ingredients. ",
+      "vegan": false
+    },
+    {
+      "id": "",
+      "title": "Butter Chicken",
+      "image": "image",
+      "time": 30,
+      "description": "The westerners take on India's curry. ",
+      "vegan": false
+    },
+    {
+      "id": "",
+      "title": "",
+      "image": "",
+      "time": 0,
+      "description": "",
+      "vegan": false
+    }
+  ]
+}

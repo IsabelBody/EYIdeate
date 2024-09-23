@@ -1,101 +1,98 @@
-import Image from "next/image";
+"use client"; // Ensure the component is treated as a Client Component
+
+import { useState, useEffect } from 'react';
+import { Input } from '@/components/ui/input';
+import { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Avatar } from '@/components/ui/avatar';
+import { AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
+
+interface Recipe {
+  title: string; 
+  image: string; 
+  time: number; 
+  description: string;
+  vegan: boolean; 
+  id: string;
+}
+
+async function getRecipes(): Promise<Recipe[]> {
+  const result = await fetch('http://localhost:4000/recipes');
+  return result.json();
+}
+
+async function addRecipe(newRecipe: Recipe) {
+  await fetch('http://localhost:4000/recipes', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(newRecipe),
+  });
+}
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [newRecipe, setNewRecipe] = useState<Recipe>({
+    title: '', image: '', time: 0, description: '', vegan: false, id: ''
+  });
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+  // Fetch recipes when the component mounts
+  useEffect(() => {
+    async function fetchRecipes() {
+      const initialRecipes = await getRecipes();
+      setRecipes(initialRecipes);
+    }
+    fetchRecipes();
+  }, []); // Empty dependency array to run only on mount
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await addRecipe(newRecipe);  // Send recipe to the backend
+    const updatedRecipes = await getRecipes(); // Get updated list
+    setRecipes(updatedRecipes);  // Update UI with new recipe
+    setNewRecipe({ title: '', image: '', time: 0, description: '', vegan: false, id: '' }); // Reset form
+  };
+
+  return (
+    <main>
+      {/* Form to add a new recipe */}
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <Input placeholder="Recipe Title" value={newRecipe.title} onChange={(e) => setNewRecipe({...newRecipe, title: e.target.value})} />
+        <Input placeholder="Image Name" value={newRecipe.image} onChange={(e) => setNewRecipe({...newRecipe, image: e.target.value})} />
+        <Input placeholder="Time to Cook" type="number" value={newRecipe.time} onChange={(e) => setNewRecipe({...newRecipe, time: Number(e.target.value)})} />
+        <Input placeholder="Description" value={newRecipe.description} onChange={(e) => setNewRecipe({...newRecipe, description: e.target.value})} />
+        <label>
+          <input type="checkbox" checked={newRecipe.vegan} onChange={(e) => setNewRecipe({...newRecipe, vegan: e.target.checked})} /> Vegan
+        </label>
+        <Button type="submit">Add Recipe</Button>
+      </form>
+
+      {/* Existing recipes */}
+      <div className="grid grid-cols-3 gap-8 mt-8">
+        {recipes.map(recipe => (
+          <Card key={recipe.id} className="flex flex-col justify-between">
+            <CardHeader className="flex-row gap-4 items-center">
+              <Avatar>
+                <AvatarImage src={`/img/${recipe.image}`} alt="recipe img" />
+                <AvatarFallback>{recipe.title.slice(0, 2)}</AvatarFallback>
+              </Avatar>
+              <div>
+                <CardTitle>{recipe.title}</CardTitle>
+                <CardDescription>{recipe.time} mins to cook.</CardDescription>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <p>{recipe.description}</p>
+            </CardContent>
+            <CardFooter className="flex justify-between">
+              <Button>View Recipe</Button>
+              {recipe.vegan && <Badge variant="secondary">Vegan!</Badge>}
+            </CardFooter>
+          </Card>
+        ))}
+      </div>
+    </main>
   );
 }
