@@ -14,6 +14,8 @@ const BuddyPage = () => {
   const [messages, setMessages] = useState<any[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const [prompts, setPrompts] = useState<string[]>([]);
+  const [chatbotResponse, setChatbotResponse] = useState<string | null>(null);
+  const [newAIMessage, setNewAIMessage] = useState('');
 
   useEffect(() => {
     const pairedBuddy = localStorage.getItem('pairedBuddy');
@@ -70,6 +72,35 @@ const BuddyPage = () => {
     }
   };
 
+  const sendAIMessage = async () => {
+    if (newAIMessage.trim() === '') return;
+
+    await fetchChatbotResponse(newAIMessage);
+    setNewAIMessage('');
+  };
+
+  // Fetch the chatbot's response
+  const fetchChatbotResponse = async (message: string) => {
+    try {
+      const response = await fetch('/api/chatbot', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message, event: buddyData?.event, userData: buddyData?.questionnaire }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to get chatbot response');
+      }
+
+      const data = await response.json();
+      setChatbotResponse(data.response); // Assuming the response is in { response: '...' }
+    } catch (error) {
+      console.error('Error fetching chatbot response:', error);
+    }
+  };
+
   // Calculate common attributes
   const calculateCommonAttributes = () => {
     if (!buddyData) return '';
@@ -81,17 +112,17 @@ const BuddyPage = () => {
       commonAttributes.push(`You both speak <strong>${buddyData.questionnaire.language}</strong>`);
     }
     if (buddyData.questionnaire.degree === loggedInUser.questionnaire.degree) {
-      commonAttributes.push(`you both study <strong>${buddyData.questionnaire.degree}</strong>`);
+      commonAttributes.push(`You both study <strong>${buddyData.questionnaire.degree}</strong>`);
     }
     if (buddyData.questionnaire.country === loggedInUser.questionnaire.country) {
-      commonAttributes.push(`you are both from <strong>${buddyData.questionnaire.country}</strong>`);
+      commonAttributes.push(`You are both from <strong>${buddyData.questionnaire.country}</strong>`);
     }
 
     const commonHobbies = buddyData.questionnaire.hobbies.filter((hobby: string) =>
       loggedInUser.questionnaire.hobbies.includes(hobby)
     );
     if (commonHobbies.length > 0) {
-      commonAttributes.push(`you both enjoy <strong>${commonHobbies.join(', ')}</strong>`);
+      commonAttributes.push(`You both enjoy <strong>${commonHobbies.join(', ')}</strong>`);
     }
 
     return commonAttributes.join(', '); // Join the attributes to form a single string
@@ -135,7 +166,7 @@ const BuddyPage = () => {
         {/* Your Buddy Details Card */}
         <Card className="w-full max-w-md">
           <CardHeader>
-            <CardTitle>👤 Your Buddy</CardTitle>
+            <CardTitle>😊 Your Buddy</CardTitle>
           </CardHeader>
           <CardContent>
             <p><strong>Username:</strong> {buddyData?.username}</p>
@@ -176,7 +207,7 @@ const BuddyPage = () => {
         </CardContent>
       </Card>
 
-      {/* Chat UI */}
+      {/* Buddy Chat UI */}
       <div className="flex flex-col w-full max-w-2xl mb-6">
         <Card>
           <CardHeader>
@@ -209,29 +240,52 @@ const BuddyPage = () => {
         </Card>
       </div>
 
-      {/* Suggested Messages */}
+      {/* Suggested Messages for Buddy Chat */}
       <div className="flex w-full max-w-2xl mb-6 flex-col">
         <h3 className="text-lg font-bold mb-2">🤔 Unsure what to say? Try these:</h3>
-        <div className="flex flex-col space-y-2">
-          {prompts.length > 0 ? (
-            prompts.map((prompt, index) => (
-              <div
-                key={index}
-                className="bg-blue-100 p-2 rounded-lg max-w-md cursor-pointer hover:bg-blue-200"
-                onClick={() => setNewMessage(prompt)} // Set prompt as new message on click
-              >
-                {prompt}
-              </div>
-            ))
-          ) : (
-            <p>Loading prompts...</p>
-          )}
+        <div className="flex flex-wrap gap-2">
+        {prompts.map((prompt, index) => (
+            <Button
+              key={index}
+              variant="outline"
+              onClick={() => {
+                setNewMessage(prompt);
+              }}
+            >
+              {prompt}
+            </Button>
+          ))}
         </div>
       </div>
 
-      <Button variant="default" onClick={() => router.push('/events')}>
-        Back to Events
-      </Button>
+      {/* AI Chatbot UI */}
+      <div className="flex flex-col w-full max-w-2xl mb-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>🤖 Chat with the AI</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="h-64 overflow-y-scroll border p-2 bg-gray-100 rounded">
+              {chatbotResponse && (
+                <div>
+                  <strong>Chatbot:</strong> {chatbotResponse}
+                </div>
+              )}
+            </div>
+            <div className="mt-4 flex space-x-2">
+              <Input
+                placeholder="Ask the AI..."
+                value={newAIMessage}
+                onChange={(e) => setNewAIMessage(e.target.value)}
+                className="flex-grow"
+              />
+              <Button variant="default" onClick={sendAIMessage}>
+                Ask AI
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 };

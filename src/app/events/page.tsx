@@ -102,7 +102,7 @@ const EventsPage = () => {
       <h1 className="text-3xl font-semibold mb-4">Upcoming Events</h1>
       {/* Weighting settings */}
       <div className="mb-4">
-        <h2 className="text-xl font-semibold">Set Weightings for Pairing</h2>
+        <h2 className="text-xl font-semibold">Set Weightings for you Buddy Pairing</h2>
         <div>
           <label>Language: </label>
           <input
