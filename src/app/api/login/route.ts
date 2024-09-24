@@ -20,5 +20,10 @@ export async function POST(req: Request) {
   }
 
   // Successful login
-  return NextResponse.json({ message: 'Login successful!' });
+  const userData = {
+    username: user.username,
+    questionnaire: user.questionnaire || {}, // Include questionnaire data if available
+  };
+
+  return NextResponse.json({ message: 'Login successful!', data: userData });
 }

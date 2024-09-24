@@ -15,9 +15,6 @@ const LoginPage = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    console.log(username, password);
-
-    
     try {
       const response = await fetch('/api/login', {
         method: 'POST',
@@ -30,8 +27,8 @@ const LoginPage = () => {
       const data = await response.json();
 
       if (response.ok) {
-        localStorage.setItem('loggedInUser', JSON.stringify(data)); // Store user data if needed
-        router.push('/events'); // Redirect to the events page after login
+        localStorage.setItem('loggedInUser', username); // Store the logged-in user's username
+        router.push('/profile'); // Redirect to the profile page after login
       } else {
         setError(data.message); // Display error message
       }

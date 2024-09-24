@@ -5,12 +5,14 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { useRouter } from 'next/navigation';
+import { useUserContext } from '../UserContext';
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const router = useRouter();
+  const { setLoggedInUser } = useUserContext();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,7 +29,9 @@ const LoginPage = () => {
       const data = await response.json();
 
       if (response.ok) {
-        localStorage.setItem('loggedInUser', JSON.stringify(data)); // Store user data if needed
+        // Store user object as JSON including the new structure
+        localStorage.setItem('loggedInUser', JSON.stringify(data.data)); 
+        setLoggedInUser(data.data); // Update context with user data
         router.push('/events'); // Redirect to the events page after login
       } else {
         setError(data.message); // Display error message

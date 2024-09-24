@@ -231,6 +231,30 @@
         ],
         "country": "New Zealand"
       }
+    },
+    {
+      "username": "RoseWood",
+      "password": "isabel12",
+      "questionnaire": {
+        "language": "English",
+        "degree": "Maths",
+        "hobbies": [
+          "Dance"
+        ],
+        "country": "Australia"
+      }
+    },
+    {
+      "username": "Grace",
+      "password": "password",
+      "questionnaire": {
+        "language": "English",
+        "degree": "Maths",
+        "hobbies": [
+          "Golf"
+        ],
+        "country": "China"
+      }
     }
   ]
 }
