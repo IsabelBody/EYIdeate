@@ -106,17 +106,17 @@ const BuddyPage = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          language: buddyData?.questionnaire.language, // Use buddy's language
-          hobbies: buddyData?.questionnaire.hobbies // Use buddy's hobbies
+          language: buddyData?.questionnaire.language,
+          hobbies: buddyData?.questionnaire.hobbies,
         }),
       });
-  
+
       if (!response.ok) {
         throw new Error('Failed to fetch conversation prompts');
       }
-  
+
       const data = await response.json();
-      setPrompts(data.prompts); // Store prompts in state
+      setPrompts(data.prompts);
     } catch (error) {
       console.error('Error fetching conversation prompts:', error);
     }
@@ -142,7 +142,25 @@ const BuddyPage = () => {
         </CardContent>
       </Card>
 
-      {/* Display Prompts */}
+      {/* Display Common Attributes */}
+      <Card className="w-full max-w-md mb-6">
+        <CardHeader>
+          <CardTitle>Common Attributes</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {calculateCommonAttributes().length > 0 ? (
+            <ul>
+              {calculateCommonAttributes().map((attribute, index) => (
+                <li key={index}>{attribute}</li>
+              ))}
+            </ul>
+          ) : (
+            <p>No common attributes found.</p>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Display Conversation Prompts */}
       <Card className="w-full max-w-md mb-6">
         <CardHeader>
           <CardTitle>Conversation Prompts</CardTitle>
@@ -159,6 +177,25 @@ const BuddyPage = () => {
           )}
         </CardContent>
       </Card>
+
+      {/* Event Details Card */}
+      {buddyData?.event && (
+        <Card className="w-full max-w-md mb-6">
+          <CardHeader>
+            <CardTitle>Event Details</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <img
+              src={`/img/${buddyData.event.image}`}
+              alt={buddyData.event.title}
+              className="w-full h-48 object-cover rounded-lg mb-2"
+            />
+            <h2 className="text-xl font-semibold">{buddyData.event.title}</h2>
+            <p>{buddyData.event.description}</p>
+            <p className="text-gray-500">Duration: {buddyData.event.time} minutes</p>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Chat UI */}
       <div className="w-full max-w-md mb-6">
