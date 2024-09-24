@@ -18,7 +18,7 @@ const HomePage = () => {
       
       {/* Text Below the Banner */}
       <div className="p-8 max-w-sm w-full text-center z-10 mt-4">
-        <h1 className="text-3xl font-semibold mb-4">Welcome to the Buddy System!</h1>
+        <h1 className="text-3xl font-semibold mb-4">Bringing Friends Together, One Event at a Time</h1>
         <div className="flex flex-col space-y-4">
           <Link href="/events">
             <Button className="w-full">VIEW EVENTS</Button>
