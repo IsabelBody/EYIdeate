@@ -21,12 +21,10 @@ const BuddyPage = () => {
       router.push('/events');
     } else {
       const buddy = JSON.parse(pairedBuddy);
-      // Log to verify all required properties are present
-      console.log('Retrieved buddy data:', buddy);
-  
-      if (!buddy.username) { // Adjust this condition based on what properties you have
-        console.error('Buddy data is missing username:', buddy);
-        alert('Buddy data is incomplete. Please re-pair.');
+
+      if (!buddy.username || !buddy.event) {
+        console.error('Buddy data or event is missing:', buddy);
+        alert('Buddy data or event is incomplete. Please re-pair.');
         router.push('/events');
       } else {
         setBuddyData(buddy);
@@ -36,6 +34,8 @@ const BuddyPage = () => {
 
   // Load chat messages in real-time
   useEffect(() => {
+    if (!buddyData) return;
+
     const chatRef = ref(realTimeDb, 'chats');
     onValue(chatRef, (snapshot) => {
       const data = snapshot.val();
@@ -52,27 +52,18 @@ const BuddyPage = () => {
   const sendMessage = async () => {
     if (newMessage.trim() === '') return;
 
-    // Check if buddyData is defined and has the required properties
-    if (!buddyData || !buddyData.username) {
-      console.error('Buddy data is missing necessary properties:', buddyData);
-      return;
-    }
-
     const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || 'null');
     const messageData = {
       text: newMessage,
-      sender: loggedInUser.username || 'Anonymous', // Use logged-in user's username
-      senderId: loggedInUser.username, // Store logged-in user's username
-      receiverId: buddyData.username, // Buddy's username as the receiver
+      sender: loggedInUser.username || 'Anonymous',
+      senderId: loggedInUser.username,
+      receiverId: buddyData.username,
       timestamp: Date.now(),
     };
 
-    console.log('Sending message data:', messageData); // Log the message data
-
     try {
-      // Push new message to the database
       await push(ref(realTimeDb, 'chats'), messageData);
-      setNewMessage(''); // Clear input after sending
+      setNewMessage(''); 
     } catch (error) {
       console.error('Error sending message:', error);
     }
@@ -91,11 +82,30 @@ const BuddyPage = () => {
         </CardContent>
       </Card>
 
+      {/* Event Details Card */}
+      {buddyData?.event && (
+        <Card className="w-full max-w-md mb-6">
+          <CardHeader>
+            <CardTitle>Event Details</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <img
+              src={`/img/${buddyData.event.image}`}
+              alt={buddyData.event.title}
+              className="w-full h-48 object-cover rounded-lg mb-2"
+            />
+            <h2 className="text-xl font-semibold">{buddyData.event.title}</h2>
+            <p>{buddyData.event.description}</p>
+            <p className="text-gray-500">Duration: {buddyData.event.time} minutes</p>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Chat UI */}
       <div className="w-full max-w-md mb-6">
         <Card>
           <CardHeader>
-            <CardTitle>Live Chat with {buddyData?.username}</CardTitle>
+            <CardTitle>Get to know {buddyData?.username}!</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="h-64 overflow-y-scroll border p-2 bg-gray-100 rounded">
