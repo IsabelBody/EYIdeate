@@ -1,108 +1,74 @@
 {
-    "recipes": [
+    "events": [
       {
         "id": "1",
-        "title": "Veggie Carbonara",
-        "image": "veggie_carbonara.jpg",
-        "time": 20,
-        "description": "A vegetarian twist on the classic Italian pasta dish with eggs, cheese, and vegetarian bacon.",
-        "vegan": false
-      },
+      "title": "Music Festival Extravaganza",
+      "image": "music_festival.jpg",
+      "time": 240,
+      "description": "A full-day music festival featuring live performances from various genres, food stalls, and fun activities."
+    },
       {
         "id": "2",
-        "title": "Veg Stir-Fry",
-        "image": "veg_stir_fry.jpg",
-        "time": 25,
-        "description": "A quick and healthy vegetarian stir-fry with fresh vegetables and tofu.",
-        "vegan": true
-      },
+      "title": "Art Exhibition - Colors of Life",
+      "image": "art_exhibition.jpg",
+      "time": 180,
+      "description": "Explore a diverse collection of contemporary art showcasing the vibrant colors and emotions of life."
+    },
       {
         "id": "3",
-        "title": "Veg Alfredo",
-        "image": "veg_alfredo.jpg",
-        "time": 30,
-        "description": "A creamy and rich vegetarian Alfredo pasta made with cashew cream and fresh herbs.",
-        "vegan": false
-      },
+      "title": "Food and Wine Festival",
+      "image": "food_wine_festival.jpg",
+      "time": 300,
+      "description": "Indulge in gourmet food and wine from local and international chefs and winemakers, paired with live entertainment."
+    },
       {
         "id": "4",
-        "title": "Vegan Tacos",
-        "image": "vegan_tacos.jpg",
-        "time": 15,
-        "description": "Delicious vegan tacos filled with black beans, avocado, and salsa.",
-        "vegan": true
-      },
+      "title": "Marathon for Charity",
+      "image": "charity_marathon.jpg",
+      "time": 180,
+      "description": "Join us for a marathon to raise funds for local charities, with routes for all skill levels and post-race celebrations."
+    },
       {
         "id": "5",
-        "title": "Mushroom Risotto",
-        "image": "mushroom_risotto.jpg",
-        "time": 40,
-        "description": "A rich and creamy risotto with sautéed mushrooms and Parmesan cheese.",
-        "vegan": false
-      },
+      "title": "Film Screening - Film Night",
+      "image": "film_night.jpg",
+      "time": 120,
+      "description": "A special screening of independent films from emerging filmmakers, followed by a Q&A session with directors."
+    },
       {
         "id": "6",
-        "title": "Chickpea Curry",
-        "image": "chickpea_curry.jpg",
-        "time": 35,
-        "description": "A fragrant and flavorful chickpea curry made with coconut milk and spices.",
-        "vegan": true
-      },
+      "title": "Yoga Retreat",
+      "image": "yoga_retreat.jpg",
+      "time": 420,
+      "description": "A day-long retreat focused on mindfulness and relaxation with yoga sessions, meditation, and wellness workshops."
+    },
       {
         "id": "7",
-        "title": "Vegan Burger",
-        "image": "vegan_burger.jpg",
-        "time": 20,
-        "description": "A hearty and delicious vegan burger made with black beans, oats, and spices.",
-        "vegan": true
-      },
+      "title": "Coding Bootcamp",
+      "image": "coding_retreat.jpg",
+      "time": 480,
+      "description": "A hands-on coding bootcamp for beginners, teaching the fundamentals of web development and programming."
+    },
       {
         "id": "8",
-        "title": "Caprese Salad",
-        "image": "caprese_salad.jpg",
-        "time": 10,
-        "description": "A simple and fresh salad with mozzarella, tomatoes, and basil.",
-        "vegan": false
-      },
+      "title": "Photography Workshop",
+      "image": "photography_workshop.jpg",
+      "time": 150,
+      "description": "Learn the basics of photography and enhance your skills with professional tips and hands-on practice."
+    },
       {
         "id": "9",
-        "title": "Lentil Soup",
-        "image": "lentil_soup.jpg",
-        "time": 45,
-        "description": "A hearty and comforting soup made with lentils, carrots, and spices.",
-        "vegan": true
-      },
+      "title": "Cooking Masterclass",
+      "image": "cooking_class.jpg",
+      "time": 180,
+      "description": "A masterclass by a renowned chef, where participants learn to cook gourmet dishes with professional techniques."
+    },
       {
         "id": "10",
-        "title": "Vegan Pancakes",
-        "image": "vegan_pancakes.jpg",
-        "time": 15,
-        "description": "Fluffy and light vegan pancakes made with almond milk and whole wheat flour.",
-        "vegan": true
-      },
-      {
-        "id": "",
-        "title": "French Cuisine",
-        "image": "image",
-        "time": 60,
-        "description": "A great dish of various intense ingredients. ",
-        "vegan": false
-      },
-      {
-        "id": "",
-        "title": "Butter Chicken",
-        "image": "image",
-        "time": 30,
-        "description": "The westerners take on India's curry. ",
-        "vegan": false
-      },
-      {
-        "id": "",
-        "title": "",
-        "image": "",
-        "time": 0,
-        "description": "",
-        "vegan": false
-      }
+      "title": "World Dance Show",
+      "image": "dance_show.jpg",
+      "time": 120,
+      "description": "A spectacular showcase of traditional and contemporary dance styles from around the world."
+    }
     ]
   }
