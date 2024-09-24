@@ -14,36 +14,39 @@ const RegisterPage = () => {
   const [degree, setDegree] = useState('');
   const [hobbies, setHobbies] = useState('');
   const [country, setCountry] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Save user data to local storage
     const users = JSON.parse(localStorage.getItem('users') || '[]');
+    const userExists = users.find((user: any) => user.username === username);
 
-    // Check for existing username
-    if (users.some((user: any) => user.username === username)) {
-      alert('Username already exists');
-      return;
+    if (userExists) {
+      setErrorMessage('Username already exists');
+      setSuccessMessage('');
+    } else {
+      const newUser = {
+        username,
+        password,
+        questionnaire: {
+          language,
+          degree,
+          hobbies: hobbies.split(',').map((hobby) => hobby.trim()),
+          country,
+        },
+      };
+
+      users.push(newUser);
+      localStorage.setItem('users', JSON.stringify(users));
+      setSuccessMessage('Registration successful! Please log in.');
+      setErrorMessage('');
+      setTimeout(() => {
+        router.push('/login');
+      }, 2000);
     }
-
-    const newUser = {
-      username,
-      password,
-      questionnaire: {
-        language,
-        degree,
-        hobbies: hobbies.split(',').map((hobby) => hobby.trim()), // Split hobbies into an array
-        country,
-      },
-    };
-
-    users.push(newUser);
-    localStorage.setItem('users', JSON.stringify(users));
-
-    alert('User registered successfully');
-    router.push('/login'); // Redirect to login page after registration
   };
 
   return (
@@ -92,7 +95,7 @@ const RegisterPage = () => {
             />
           </div>
           <div className="mb-4">
-            <Label htmlFor="hobbies">Hobbies (comma-separated)</Label>
+            <Label htmlFor="hobbies">Hobbies</Label>
             <Input
               id="hobbies"
               type="text"
@@ -114,6 +117,8 @@ const RegisterPage = () => {
           <Button type="submit" className="w-full">
             Register
           </Button>
+          {errorMessage && <p className="mt-4 text-red-500">{errorMessage}</p>}
+          {successMessage && <p className="mt-4 text-green-500">{successMessage}</p>}
         </form>
       </Card>
     </div>
