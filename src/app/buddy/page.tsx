@@ -64,7 +64,7 @@ const BuddyPage = () => {
 
     try {
       await push(ref(realTimeDb, 'chats'), messageData);
-      setNewMessage(''); 
+      setNewMessage('');
     } catch (error) {
       console.error('Error sending message:', error);
     }
@@ -131,71 +131,56 @@ const BuddyPage = () => {
 
   return (
     <div className="flex flex-col justify-center items-center min-h-screen p-4">
-      <Card className="w-full max-w-md mb-6">
-        <CardHeader>
-          <CardTitle>Your Buddy</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p><strong>Username:</strong> {buddyData?.username}</p>
-          <p><strong>Language:</strong> {buddyData?.questionnaire.language}</p>
-          <p><strong>Degree:</strong> {buddyData?.questionnaire.degree}</p>
-          <p><strong>Hobbies:</strong> {buddyData?.questionnaire.hobbies.join(', ')}</p>
-          <p><strong>Country of Origin:</strong> {buddyData?.questionnaire.country}</p>
-        </CardContent>
-      </Card>
+      <div className="flex space-x-4 mb-6">
+        {/* Your Buddy Details Card */}
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle>👤 Your Buddy</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p><strong>Username:</strong> {buddyData?.username}</p>
+            <p><strong>Language:</strong> {buddyData?.questionnaire.language}</p>
+            <p><strong>Degree:</strong> {buddyData?.questionnaire.degree}</p>
+            <p><strong>Hobbies:</strong> {buddyData?.questionnaire.hobbies.join(', ')}</p>
+            <p><strong>Country of Origin:</strong> {buddyData?.questionnaire.country}</p>
+          </CardContent>
+        </Card>
+
+        {/* Event Details Card */}
+        {buddyData?.event && (
+          <Card className="w-full max-w-md">
+            <CardHeader>
+              <CardTitle>🎉 Event Details</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <img
+                src={`/img/${buddyData.event.image}`}
+                alt={buddyData.event.title}
+                className="w-full h-48 object-cover rounded-lg mb-2"
+              />
+              <h2 className="text-xl font-semibold">{buddyData.event.title}</h2>
+              <p>{buddyData.event.description}</p>
+              <p className="text-gray-500">Duration: {buddyData.event.time} minutes</p>
+            </CardContent>
+          </Card>
+        )}
+      </div>
 
       {/* Display Common Attributes */}
-      <Card className="w-full max-w-md mb-6">
+      <Card className="w-full max-w-2xl mb-6">
         <CardHeader>
-          <CardTitle>We've paired you with {buddyData?.username} because..</CardTitle>
+          <CardTitle>🔗 We've paired you with {buddyData?.username} because..</CardTitle>
         </CardHeader>
         <CardContent>
           <p dangerouslySetInnerHTML={{ __html: calculateCommonAttributes() || 'No common attributes found.' }} />
         </CardContent>
       </Card>
 
-      {/* Display Conversation Prompts */}
-      <Card className="w-full max-w-md mb-6">
-        <CardHeader>
-          <CardTitle>Conversation Prompts</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {prompts.length > 0 ? (
-            <ul>
-              {prompts.map((prompt, index) => (
-                <li key={index}>{prompt}</li>
-              ))}
-            </ul>
-          ) : (
-            <p>Loading prompts...</p>
-          )}
-        </CardContent>
-      </Card>
-
-      {/* Event Details Card */}
-      {buddyData?.event && (
-        <Card className="w-full max-w-md mb-6">
-          <CardHeader>
-            <CardTitle>Event Details</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <img
-              src={`/img/${buddyData.event.image}`}
-              alt={buddyData.event.title}
-              className="w-full h-48 object-cover rounded-lg mb-2"
-            />
-            <h2 className="text-xl font-semibold">{buddyData.event.title}</h2>
-            <p>{buddyData.event.description}</p>
-            <p className="text-gray-500">Duration: {buddyData.event.time} minutes</p>
-          </CardContent>
-        </Card>
-      )}
-
       {/* Chat UI */}
-      <div className="w-full max-w-md mb-6">
+      <div className="flex flex-col w-full max-w-2xl mb-6">
         <Card>
           <CardHeader>
-            <CardTitle>Get to know {buddyData?.username}!</CardTitle>
+            <CardTitle>💬 Start the conversation with {buddyData?.username}!</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="h-64 overflow-y-scroll border p-2 bg-gray-100 rounded">
@@ -222,6 +207,26 @@ const BuddyPage = () => {
             </div>
           </CardContent>
         </Card>
+      </div>
+
+      {/* Suggested Messages */}
+      <div className="flex w-full max-w-2xl mb-6 flex-col">
+        <h3 className="text-lg font-bold mb-2">🤔 Unsure what to say? Try these:</h3>
+        <div className="flex flex-col space-y-2">
+          {prompts.length > 0 ? (
+            prompts.map((prompt, index) => (
+              <div
+                key={index}
+                className="bg-blue-100 p-2 rounded-lg max-w-md cursor-pointer hover:bg-blue-200"
+                onClick={() => setNewMessage(prompt)} // Set prompt as new message on click
+              >
+                {prompt}
+              </div>
+            ))
+          ) : (
+            <p>Loading prompts...</p>
+          )}
+        </div>
       </div>
 
       <Button variant="default" onClick={() => router.push('/events')}>
