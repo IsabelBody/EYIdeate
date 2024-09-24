@@ -21,8 +21,7 @@ const ProfilePage = () => {
 
   return (
     <div className="flex flex-col items-center p-4">
-      <h1 className="text-2xl font-semibold">{userData.username}'s Profile</h1>
-      <h2 className="text-lg mt-4">Questionnaire Data:</h2>
+      <h1 className="text-2xl font-semibold">@{userData.username}</h1>
       <p>Language: {userData.questionnaire.language}</p>
       <p>Degree: {userData.questionnaire.degree}</p>
       <p>Hobbies: {userData.questionnaire.hobbies.join(', ')}</p>
