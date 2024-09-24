@@ -50,8 +50,7 @@ const RegisterPage = () => {
         setErrorMessage(data.message || 'An error occurred');
         setSuccessMessage('');
     }
-};
-
+  };
 
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">
@@ -79,43 +78,47 @@ const RegisterPage = () => {
             />
           </div>
           <div className="mb-4">
-            <Label htmlFor="language">Language</Label>
+            <Label htmlFor="language">What language do you speak?</Label>
             <Input
               id="language"
               type="text"
               value={language}
               onChange={(e) => setLanguage(e.target.value)}
               required
+              placeholder="e.g., Mandarin"
             />
           </div>
           <div className="mb-4">
-            <Label htmlFor="degree">Degree</Label>
+            <Label htmlFor="degree">What degree are you pursuing?</Label>
             <Input
               id="degree"
               type="text"
               value={degree}
               onChange={(e) => setDegree(e.target.value)}
               required
+              placeholder="e.g., Computer Science"
             />
           </div>
           <div className="mb-4">
-            <Label htmlFor="hobbies">Hobbies</Label>
+            <Label htmlFor="hobbies">What are your hobbies? (separate by commas)</Label>
             <Input
               id="hobbies"
               type="text"
               value={hobbies}
               onChange={(e) => setHobbies(e.target.value)}
               required
+              placeholder="e.g., reading, hiking, gaming"
             />
           </div>
           <div className="mb-4">
-            <Label htmlFor="country">Country</Label>
+            <Label htmlFor="country">Which country are you from?</Label>
             <Input
               id="country"
               type="text"
               value={country}
               onChange={(e) => setCountry(e.target.value)}
               required
+              placeholder="e.g., New Zealand"
             />
           </div>
           <Button type="submit" className="w-full">

@@ -21,7 +21,7 @@ const ProfilePage = () => {
   return (
     <div className="p-8">
       <h1 className="text-3xl font-semibold mb-6">@ {userDetails.username}</h1>
-      <p><strong>Country:</strong> {userDetails?.questionnaire?.country || 'N/A'}</p>
+      <p><strong>Country of Origin:</strong> {userDetails?.questionnaire?.country || 'N/A'}</p>
       <p><strong>Language:</strong> {userDetails?.questionnaire?.language || 'N/A'}</p>
       <p><strong>Degree:</strong> {userDetails?.questionnaire?.degree || 'N/A'}</p>
       <p><strong>Hobbies:</strong> {userDetails?.questionnaire?.hobbies?.join(', ') || 'N/A'}</p>

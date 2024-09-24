@@ -72,29 +72,29 @@ const BuddyPage = () => {
 
   // Calculate common attributes
   const calculateCommonAttributes = () => {
-    if (!buddyData) return [];
+    if (!buddyData) return '';
 
     const commonAttributes: string[] = [];
     const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || 'null');
 
     if (buddyData.questionnaire.language === loggedInUser.questionnaire.language) {
-      commonAttributes.push(`both speak <strong>${buddyData.questionnaire.language}</strong>`);
+      commonAttributes.push(`You both speak <strong>${buddyData.questionnaire.language}</strong>`);
     }
     if (buddyData.questionnaire.degree === loggedInUser.questionnaire.degree) {
-      commonAttributes.push(`both study <strong>${buddyData.questionnaire.degree}</strong>`);
+      commonAttributes.push(`you both study <strong>${buddyData.questionnaire.degree}</strong>`);
     }
     if (buddyData.questionnaire.country === loggedInUser.questionnaire.country) {
-      commonAttributes.push(`both are from <strong>${buddyData.questionnaire.country}</strong>`);
+      commonAttributes.push(`you are both from <strong>${buddyData.questionnaire.country}</strong>`);
     }
 
     const commonHobbies = buddyData.questionnaire.hobbies.filter((hobby: string) =>
       loggedInUser.questionnaire.hobbies.includes(hobby)
     );
     if (commonHobbies.length > 0) {
-      commonAttributes.push(`both enjoy <strong>${commonHobbies.join(', ')}</strong>`);
+      commonAttributes.push(`you both enjoy <strong>${commonHobbies.join(', ')}</strong>`);
     }
 
-    return commonAttributes;
+    return commonAttributes.join(', '); // Join the attributes to form a single string
   };
 
   // Fetch conversation prompts
@@ -139,24 +139,18 @@ const BuddyPage = () => {
           <p><strong>Username:</strong> {buddyData?.username}</p>
           <p><strong>Language:</strong> {buddyData?.questionnaire.language}</p>
           <p><strong>Degree:</strong> {buddyData?.questionnaire.degree}</p>
+          <p><strong>Hobbies:</strong> {buddyData?.questionnaire.hobbies.join(', ')}</p>
+          <p><strong>Country of Origin:</strong> {buddyData?.questionnaire.country}</p>
         </CardContent>
       </Card>
 
       {/* Display Common Attributes */}
       <Card className="w-full max-w-md mb-6">
         <CardHeader>
-          <CardTitle>Common Attributes</CardTitle>
+          <CardTitle>We've paired you with {buddyData?.username} because..</CardTitle>
         </CardHeader>
         <CardContent>
-          {calculateCommonAttributes().length > 0 ? (
-            <ul>
-              {calculateCommonAttributes().map((attribute, index) => (
-                <li key={index} dangerouslySetInnerHTML={{ __html: attribute }} />
-              ))}
-            </ul>
-          ) : (
-            <p>No common attributes found.</p>
-          )}
+          <p dangerouslySetInnerHTML={{ __html: calculateCommonAttributes() || 'No common attributes found.' }} />
         </CardContent>
       </Card>
 
