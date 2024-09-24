@@ -199,18 +199,6 @@
       "username": "mikel@arteta",
       "password": "isabel12",
       "questionnaire": {
-        "language": "English",
-        "degree": "Compsci",
-        "hobbies": [
-          "Golf"
-        ],
-        "country": "New Zealand"
-      }
-    },
-    {
-      "username": "mikel@arteta",
-      "password": "isabel12",
-      "questionnaire": {
         "language": "French",
         "degree": "Compsci",
         "hobbies": [
