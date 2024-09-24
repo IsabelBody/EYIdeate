@@ -78,20 +78,20 @@ const BuddyPage = () => {
     const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || 'null');
 
     if (buddyData.questionnaire.language === loggedInUser.questionnaire.language) {
-      commonAttributes.push(`both speak ${buddyData.questionnaire.language}`);
+      commonAttributes.push(`both speak <strong>${buddyData.questionnaire.language}</strong>`);
     }
     if (buddyData.questionnaire.degree === loggedInUser.questionnaire.degree) {
-      commonAttributes.push(`both study ${buddyData.questionnaire.degree}`);
+      commonAttributes.push(`both study <strong>${buddyData.questionnaire.degree}</strong>`);
     }
     if (buddyData.questionnaire.country === loggedInUser.questionnaire.country) {
-      commonAttributes.push(`both are from ${buddyData.questionnaire.country}`);
+      commonAttributes.push(`both are from <strong>${buddyData.questionnaire.country}</strong>`);
     }
 
     const commonHobbies = buddyData.questionnaire.hobbies.filter((hobby: string) =>
       loggedInUser.questionnaire.hobbies.includes(hobby)
     );
     if (commonHobbies.length > 0) {
-      commonAttributes.push(`both enjoy ${commonHobbies.join(', ')}`);
+      commonAttributes.push(`both enjoy <strong>${commonHobbies.join(', ')}</strong>`);
     }
 
     return commonAttributes;
@@ -151,7 +151,7 @@ const BuddyPage = () => {
           {calculateCommonAttributes().length > 0 ? (
             <ul>
               {calculateCommonAttributes().map((attribute, index) => (
-                <li key={index}>{attribute}</li>
+                <li key={index} dangerouslySetInnerHTML={{ __html: attribute }} />
               ))}
             </ul>
           ) : (
