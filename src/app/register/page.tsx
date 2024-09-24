@@ -18,10 +18,32 @@ const RegisterPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle registration logic here...
 
-    // On successful registration
-    router.push('/login');
+    // Save user data to local storage
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+
+    // Check for existing username
+    if (users.some((user: any) => user.username === username)) {
+      alert('Username already exists');
+      return;
+    }
+
+    const newUser = {
+      username,
+      password,
+      questionnaire: {
+        language,
+        degree,
+        hobbies: hobbies.split(',').map((hobby) => hobby.trim()), // Split hobbies into an array
+        country,
+      },
+    };
+
+    users.push(newUser);
+    localStorage.setItem('users', JSON.stringify(users));
+
+    alert('User registered successfully');
+    router.push('/login'); // Redirect to login page after registration
   };
 
   return (
@@ -70,7 +92,7 @@ const RegisterPage = () => {
             />
           </div>
           <div className="mb-4">
-            <Label htmlFor="hobbies">Hobbies</Label>
+            <Label htmlFor="hobbies">Hobbies (comma-separated)</Label>
             <Input
               id="hobbies"
               type="text"
