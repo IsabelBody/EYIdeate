@@ -114,15 +114,18 @@ const EventsPage = () => {
       {/* Weighting settings */}
       <Card className="mb-4 p-4 max-w-lg w-full">
         <CardHeader>
-          <CardTitle className="text-xl font-semibold">Set Weightings for Pairing</CardTitle>
+          <CardTitle className="text-xl font-semibold">Customize Your Buddy Matching Preferences</CardTitle>
+          <p className="text-sm text-gray-500 mt-2">
+            Adjust the importance of each category to find the best match for you. The higher the importance, the more weight it will have when pairing you with a buddy.
+          </p>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
             <div>
-              <label className="block mb-2 text-sm font-medium">Language: </label>
+              <label className="block mb-2 text-sm font-medium">Language Preference Importance: </label>
               <Select onValueChange={(value) => handleWeightChange('language', value)} value={weightings.language.toString()}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select language weight" />
+                  <SelectValue placeholder="Select importance level" />
                 </SelectTrigger>
                 <SelectContent>
                   {weightOptions.map((option) => (
@@ -134,10 +137,10 @@ const EventsPage = () => {
               </Select>
             </div>
             <div>
-              <label className="block mb-2 text-sm font-medium">Degree: </label>
+              <label className="block mb-2 text-sm font-medium">Degree Relevance Importance: </label>
               <Select onValueChange={(value) => handleWeightChange('degree', value)} value={weightings.degree.toString()}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select degree weight" />
+                  <SelectValue placeholder="Select importance level" />
                 </SelectTrigger>
                 <SelectContent>
                   {weightOptions.map((option) => (
@@ -149,10 +152,10 @@ const EventsPage = () => {
               </Select>
             </div>
             <div>
-              <label className="block mb-2 text-sm font-medium">Country: </label>
+              <label className="block mb-2 text-sm font-medium">Country of Origin Importance: </label>
               <Select onValueChange={(value) => handleWeightChange('country', value)} value={weightings.country.toString()}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select country weight" />
+                  <SelectValue placeholder="Select importance level" />
                 </SelectTrigger>
                 <SelectContent>
                   {weightOptions.map((option) => (
@@ -164,10 +167,10 @@ const EventsPage = () => {
               </Select>
             </div>
             <div>
-              <label className="block mb-2 text-sm font-medium">Hobby: </label>
+              <label className="block mb-2 text-sm font-medium">Hobby Similarity Importance: </label>
               <Select onValueChange={(value) => handleWeightChange('hobby', value)} value={weightings.hobby.toString()}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select hobby weight" />
+                  <SelectValue placeholder="Select importance level" />
                 </SelectTrigger>
                 <SelectContent>
                   {weightOptions.map((option) => (
