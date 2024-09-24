@@ -207,6 +207,30 @@
         ],
         "country": "South Africa"
       }
+    },
+    {
+      "username": "Joseph",
+      "password": "isabel12",
+      "questionnaire": {
+        "language": "Chinese",
+        "degree": "Commerce",
+        "hobbies": [
+          "Dance"
+        ],
+        "country": "China"
+      }
+    },
+    {
+      "username": "IsabelBody",
+      "password": "isabel12",
+      "questionnaire": {
+        "language": "English",
+        "degree": "Computer Science",
+        "hobbies": [
+          "Soccer"
+        ],
+        "country": "New Zealand"
+      }
     }
   ]
 }

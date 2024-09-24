@@ -21,33 +21,37 @@ const RegisterPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    const userExists = users.find((user: any) => user.username === username);
-
-    if (userExists) {
-      setErrorMessage('Username already exists');
-      setSuccessMessage('');
-    } else {
-      const newUser = {
-        username,
-        password,
-        questionnaire: {
-          language,
-          degree,
-          hobbies: hobbies.split(',').map((hobby) => hobby.trim()),
-          country,
+    const response = await fetch('/api/register', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
         },
-      };
+        body: JSON.stringify({
+            username,
+            password,
+            questionnaire: {
+                language,
+                degree,
+                hobbies: hobbies.split(',').map((hobby) => hobby.trim()),
+                country,
+            },
+        }),
+    });
 
-      users.push(newUser);
-      localStorage.setItem('users', JSON.stringify(users));
-      setSuccessMessage('Registration successful! Please log in.');
-      setErrorMessage('');
-      setTimeout(() => {
-        router.push('/login');
-      }, 2000);
+    const data = await response.json();
+
+    if (response.ok) {
+        setSuccessMessage(data.message);
+        setErrorMessage('');
+        setTimeout(() => {
+            router.push('/login');
+        }, 2000);
+    } else {
+        setErrorMessage(data.message || 'An error occurred');
+        setSuccessMessage('');
     }
-  };
+};
+
 
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">

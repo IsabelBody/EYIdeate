@@ -4,7 +4,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 // Define a User type
 export interface User {
   username: string;
-  password: string; // This is sensitive, consider not storing it
+  password: string;
   questionnaire: {
     language: string;
     degree: string;
