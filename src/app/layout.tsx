@@ -1,6 +1,9 @@
+// src/app/layout.tsx
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import Link from 'next/link'; // Import Link for navigation
+import { Button } from '@/components/ui/button'; // Import Button component
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -25,13 +28,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <nav>
-          <h1>UoA EventBuddy</h1>
-          {children}
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <nav className="flex justify-between items-center p-4 bg-gray-800 text-white">
+          <h1 className="text-xl">UoA EventBuddy</h1>
+          <Link href="/profile">
+            <Button className="rounded-full p-3 bg-blue-500 text-white hover:bg-blue-600 transition">
+              {/* Placeholder for profile icon */}
+              <span>👤</span>
+            </Button>
+          </Link>
         </nav>
+        <main>{children}</main>
       </body>
     </html>
   );
