@@ -1,6 +1,11 @@
 "use client"; // Mark this as a Client Component
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
 
 const RegisterPage = () => {
   const [username, setUsername] = useState('');
@@ -9,110 +14,86 @@ const RegisterPage = () => {
   const [degree, setDegree] = useState('');
   const [hobbies, setHobbies] = useState('');
   const [country, setCountry] = useState('');
-  const [message, setMessage] = useState('');
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    // Handle registration logic here...
 
-    const userData = {
-      username,
-      password,
-      questionnaire: {
-        language,
-        degree,
-        hobbies: hobbies.split(',').map(hobby => hobby.trim()), // Split hobbies by comma
-        country,
-      },
-    };
-
-    try {
-      const response = await fetch('/api/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userData),
-      });
-
-      if (response.ok) {
-        setMessage('User registered successfully!');
-        // Optionally, redirect to login or home page here
-      } else {
-        setMessage('Registration failed. Please try again.');
-      }
-    } catch (error) {
-      setMessage('An error occurred. Please try again.');
-      console.error('Error during registration:', error);
-    }
+    // On successful registration
+    router.push('/login');
   };
 
   return (
-    <div>
-      <h1>Register</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Username:
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-        </label>
-        <br />
-        <label>
-          Password:
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </label>
-        <br />
-        <label>
-          Language:
-          <input
-            type="text"
-            value={language}
-            onChange={(e) => setLanguage(e.target.value)}
-            required
-          />
-        </label>
-        <br />
-        <label>
-          Degree:
-          <input
-            type="text"
-            value={degree}
-            onChange={(e) => setDegree(e.target.value)}
-            required
-          />
-        </label>
-        <br />
-        <label>
-          Hobbies (comma separated):
-          <input
-            type="text"
-            value={hobbies}
-            onChange={(e) => setHobbies(e.target.value)}
-            required
-          />
-        </label>
-        <br />
-        <label>
-          Country:
-          <input
-            type="text"
-            value={country}
-            onChange={(e) => setCountry(e.target.value)}
-            required
-          />
-        </label>
-        <br />
-        <button type="submit">Register</button>
-      </form>
-      {message && <p>{message}</p>}
+    <div className="flex items-center justify-center h-screen bg-gray-100">
+      <Card className="p-8 max-w-md w-full shadow-md">
+        <h1 className="text-2xl font-semibold mb-6">Register</h1>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <Label htmlFor="username">Username</Label>
+            <Input
+              id="username"
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <Label htmlFor="password">Password</Label>
+            <Input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <Label htmlFor="language">Language</Label>
+            <Input
+              id="language"
+              type="text"
+              value={language}
+              onChange={(e) => setLanguage(e.target.value)}
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <Label htmlFor="degree">Degree</Label>
+            <Input
+              id="degree"
+              type="text"
+              value={degree}
+              onChange={(e) => setDegree(e.target.value)}
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <Label htmlFor="hobbies">Hobbies</Label>
+            <Input
+              id="hobbies"
+              type="text"
+              value={hobbies}
+              onChange={(e) => setHobbies(e.target.value)}
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <Label htmlFor="country">Country</Label>
+            <Input
+              id="country"
+              type="text"
+              value={country}
+              onChange={(e) => setCountry(e.target.value)}
+              required
+            />
+          </div>
+          <Button type="submit" className="w-full">
+            Register
+          </Button>
+        </form>
+      </Card>
     </div>
   );
 };

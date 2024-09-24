@@ -206,6 +206,31 @@
         ],
         "country": "New Zealand"
       }
+    },
+    {
+      "username": "mikel@arteta",
+      "password": "isabel12",
+      "questionnaire": {
+        "language": "French",
+        "degree": "Compsci",
+        "hobbies": [
+          "Golf",
+          "Tennis"
+        ],
+        "country": "South Africa"
+      }
+    },
+    {
+      "username": "mikel@arteta",
+      "password": "isabel12",
+      "questionnaire": {
+        "language": "French",
+        "degree": "Commerce",
+        "hobbies": [
+          "Golf"
+        ],
+        "country": "Australia"
+      }
     }
   ]
 }

@@ -5,8 +5,8 @@ import Link from 'next/link';
 const HomePage = () => {
   return (
     <div>
-      <h1>Welcome to the Buddy System</h1>
-      <Link href="/login">Go to Login</Link>
+      <Link href="/register">REGISTER</Link>
+      <Link href="/login">LOGIN</Link>
     </div>
   );
 };
