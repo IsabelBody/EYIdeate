@@ -19,26 +19,22 @@ interface User {
 const EventsPage = () => {
   const router = useRouter();
 
-  // Function to pair the user
-  const pairWithBuddy = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const pairWithBuddy = (event: React.MouseEvent<HTMLButtonElement>, selectedEvent: any) => {
     event.preventDefault();
     const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || 'null');
     if (!loggedInUser) {
       alert("You need to be logged in to pair with a buddy!");
       return;
     }
-  
-    // Get users from user data excluding the logged-in user
+
     const potentialBuddies: User[] = usersData.users.filter(
       (user: User) => user.username !== loggedInUser.username
     );
-  
-    // Function to calculate similarity score and common attributes
-    const calculateScore = (user: User): { score: number, commonAttributes: string[] } => {
+
+    const calculateScore = (user: User): { score: number; commonAttributes: string[] } => {
       let score = 0;
       let commonAttributes: string[] = [];
-  
-      // Give more weight to language and hobbies matches
+
       if (user.questionnaire.language === loggedInUser.questionnaire.language) {
         score += 3;
         commonAttributes.push(`both speak ${user.questionnaire.language}`);
@@ -51,8 +47,7 @@ const EventsPage = () => {
         score += 1;
         commonAttributes.push(`both are from ${user.questionnaire.country}`);
       }
-  
-      // Count matching hobbies
+
       const commonHobbies = user.questionnaire.hobbies.filter((hobby) =>
         loggedInUser.questionnaire.hobbies.includes(hobby)
       );
@@ -60,26 +55,24 @@ const EventsPage = () => {
         score += commonHobbies.length * 2;
         commonAttributes.push(`both enjoy ${commonHobbies.join(', ')}`);
       }
-  
+
       return { score, commonAttributes };
     };
-  
-    // Find the buddy with the highest score
+
     const bestBuddy = potentialBuddies.reduce((prev, current) => {
       const prevResult = calculateScore(prev);
       const currentResult = calculateScore(current);
       return currentResult.score > prevResult.score ? current : prev;
     }, potentialBuddies[0]);
-  
+
     if (bestBuddy) {
       const pairingResult = calculateScore(bestBuddy);
-  
-      // Store paired buddy and common attributes in local storage
       const pairedBuddy = {
         username: bestBuddy.username,
         pairedUsername: loggedInUser.username,
         questionnaire: bestBuddy.questionnaire,
-        commonAttributes: pairingResult.commonAttributes // Add common attributes here
+        commonAttributes: pairingResult.commonAttributes,
+        event: selectedEvent, // Store the selected event here
       };
       localStorage.setItem('pairedBuddy', JSON.stringify(pairedBuddy));
       router.push('/buddy');
@@ -87,8 +80,6 @@ const EventsPage = () => {
       alert('No suitable buddy found.');
     }
   };
-  
-  
 
   return (
     <div className="flex flex-col items-center justify-start h-screen pt-20">
@@ -105,12 +96,11 @@ const EventsPage = () => {
             <p className="text-gray-600">{event.description}</p>
             <p className="text-gray-500">Duration: {event.time} minutes</p>
             <button
-  onClick={(event) => pairWithBuddy(event)}
-  className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
->
-  Pair me with a Buddy
-</button>
-
+              onClick={(e) => pairWithBuddy(e, event)} // Pass the event data
+              className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
+            >
+              Pair me with a Buddy
+            </button>
           </div>
         ))}
       </div>

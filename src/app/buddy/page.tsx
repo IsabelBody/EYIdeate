@@ -13,29 +13,23 @@ const BuddyPage = () => {
   const [buddyData, setBuddyData] = useState<any>(null);
   const [messages, setMessages] = useState<any[]>([]);
   const [newMessage, setNewMessage] = useState('');
-  const [commonAttributes, setCommonAttributes] = useState<string[]>([]);
 
-  // Fetch buddy data from localStorage
   useEffect(() => {
     const pairedBuddy = localStorage.getItem('pairedBuddy');
     if (!pairedBuddy) {
       alert('No buddy found.');
       router.push('/events');
-      return;
+    } else {
+      const buddy = JSON.parse(pairedBuddy);
+
+      if (!buddy.username || !buddy.event) {
+        console.error('Buddy data or event is missing:', buddy);
+        alert('Buddy data or event is incomplete. Please re-pair.');
+        router.push('/events');
+      } else {
+        setBuddyData(buddy);
+      }
     }
-
-    const buddy = JSON.parse(pairedBuddy);
-    console.log('Parsed Buddy Data:', buddy);
-
-    if (!buddy.username) {
-      console.error('Buddy data is missing the username:', buddy);
-      alert('Buddy data is incomplete. Please re-pair.');
-      router.push('/events');
-      return;
-    }
-
-    setBuddyData(buddy);
-    setCommonAttributes(buddy.commonAttributes || []);
   }, [router]);
 
   // Load chat messages in real-time
@@ -47,8 +41,8 @@ const BuddyPage = () => {
       const data = snapshot.val();
       if (data) {
         const filteredMessages = Object.values(data).filter((message: any) =>
-          (message.senderId === buddyData.username && message.receiverId === buddyData.pairedUsername) ||
-          (message.senderId === buddyData.pairedUsername && message.receiverId === buddyData.username)
+          (message.senderId === buddyData?.username && message.receiverId === buddyData?.pairedUsername) ||
+          (message.senderId === buddyData?.pairedUsername && message.receiverId === buddyData?.username)
         );
         setMessages(filteredMessages);
       }
@@ -56,23 +50,51 @@ const BuddyPage = () => {
   }, [buddyData]);
 
   const sendMessage = async () => {
-    if (!newMessage.trim()) return;
+    if (newMessage.trim() === '') return;
 
     const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || 'null');
     const messageData = {
       text: newMessage,
-      sender: loggedInUser?.username || 'Anonymous',
+      sender: loggedInUser.username || 'Anonymous',
       senderId: loggedInUser.username,
-      receiverId: buddyData?.username,
+      receiverId: buddyData.username,
       timestamp: Date.now(),
     };
 
     try {
       await push(ref(realTimeDb, 'chats'), messageData);
-      setNewMessage('');
+      setNewMessage(''); 
     } catch (error) {
       console.error('Error sending message:', error);
     }
+  };
+
+  // Calculate common attributes
+  const calculateCommonAttributes = () => {
+    if (!buddyData) return [];
+
+    const commonAttributes: string[] = [];
+
+    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || 'null');
+
+    if (buddyData.questionnaire.language === loggedInUser.questionnaire.language) {
+      commonAttributes.push(`both speak ${buddyData.questionnaire.language}`);
+    }
+    if (buddyData.questionnaire.degree === loggedInUser.questionnaire.degree) {
+      commonAttributes.push(`both study ${buddyData.questionnaire.degree}`);
+    }
+    if (buddyData.questionnaire.country === loggedInUser.questionnaire.country) {
+      commonAttributes.push(`both are from ${buddyData.questionnaire.country}`);
+    }
+
+    const commonHobbies = buddyData.questionnaire.hobbies.filter((hobby: string) =>
+      loggedInUser.questionnaire.hobbies.includes(hobby)
+    );
+    if (commonHobbies.length > 0) {
+      commonAttributes.push(`both enjoy ${commonHobbies.join(', ')}`);
+    }
+
+    return commonAttributes;
   };
 
   return (
@@ -83,13 +105,31 @@ const BuddyPage = () => {
         </CardHeader>
         <CardContent>
           <p><strong>Username:</strong> {buddyData?.username}</p>
-          <p><strong>Language:</strong> {buddyData?.questionnaire?.language}</p>
-          <p><strong>Degree:</strong> {buddyData?.questionnaire?.degree}</p>
+          <p><strong>Language:</strong> {buddyData?.questionnaire.language}</p>
+          <p><strong>Degree:</strong> {buddyData?.questionnaire.degree}</p>
+        </CardContent>
+      </Card>
+
+      {/* Display Common Attributes */}
+      <Card className="w-full max-w-md mb-6">
+        <CardHeader>
+          <CardTitle>Common Attributes</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {calculateCommonAttributes().length > 0 ? (
+            <ul>
+              {calculateCommonAttributes().map((attribute, index) => (
+                <li key={index}>{attribute}</li>
+              ))}
+            </ul>
+          ) : (
+            <p>No common attributes found.</p>
+          )}
         </CardContent>
       </Card>
 
       {/* Event Details Card */}
-      {buddyData?.event ? (
+      {buddyData?.event && (
         <Card className="w-full max-w-md mb-6">
           <CardHeader>
             <CardTitle>Event Details</CardTitle>
@@ -103,24 +143,6 @@ const BuddyPage = () => {
             <h2 className="text-xl font-semibold">{buddyData.event.title}</h2>
             <p>{buddyData.event.description}</p>
             <p className="text-gray-500">Duration: {buddyData.event.time} minutes</p>
-          </CardContent>
-        </Card>
-      ) : (
-        <p>No event information available for this buddy.</p>
-      )}
-
-      {/* Common Attributes Section */}
-      {commonAttributes.length > 0 && (
-        <Card className="w-full max-w-md mb-6">
-          <CardHeader>
-            <CardTitle>What you have in common with {buddyData?.username}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ul className="list-disc pl-4">
-              {commonAttributes.map((attribute, index) => (
-                <li key={index}>{attribute}</li>
-              ))}
-            </ul>
           </CardContent>
         </Card>
       )}
