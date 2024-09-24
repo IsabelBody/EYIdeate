@@ -219,18 +219,6 @@
         ],
         "country": "South Africa"
       }
-    },
-    {
-      "username": "mikel@arteta",
-      "password": "isabel12",
-      "questionnaire": {
-        "language": "French",
-        "degree": "Commerce",
-        "hobbies": [
-          "Golf"
-        ],
-        "country": "Australia"
-      }
     }
   ]
 }

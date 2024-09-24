@@ -29,7 +29,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <nav>
-          <h1>UoA Buddy System</h1>
+          <h1>UoA EventBuddy</h1>
           {children}
         </nav>
       </body>
