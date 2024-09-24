@@ -4,6 +4,9 @@ import { useState } from 'react';
 import eventsData from '../../../_data/events.json';
 import { useRouter } from 'next/navigation';
 import usersData from '../../../_data/users.json';
+import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
+import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 
 interface User {
   username: string;
@@ -15,6 +18,14 @@ interface User {
     country: string;
   };
 }
+
+const weightOptions = [
+  { label: "Unimportant", value: 1 },
+  { label: "Slightly Important", value: 2 },
+  { label: "Important", value: 3 },
+  { label: "Very Important", value: 4 },
+  { label: "Extremely Important", value: 5 },
+];
 
 const EventsPage = () => {
   const router = useRouter();
@@ -90,10 +101,10 @@ const EventsPage = () => {
   };
 
   // Function to handle weighting changes
-  const handleWeightChange = (e: React.ChangeEvent<HTMLInputElement>, attribute: string) => {
+  const handleWeightChange = (attribute: string, value: string) => {
     setWeightings({
       ...weightings,
-      [attribute]: parseInt(e.target.value, 10),
+      [attribute]: parseInt(value, 10),
     });
   };
 
@@ -101,63 +112,99 @@ const EventsPage = () => {
     <div className="flex flex-col items-center justify-start h-screen pt-20">
       <h1 className="text-3xl font-semibold mb-4">Upcoming Events</h1>
       {/* Weighting settings */}
-      <div className="mb-4">
-        <h2 className="text-xl font-semibold">Set Weightings for you Buddy Pairing</h2>
-        <div>
-          <label>Language: </label>
-          <input
-            type="number"
-            value={weightings.language}
-            onChange={(e) => handleWeightChange(e, 'language')}
-            className="border rounded px-2 mx-1"
-          />
-        </div>
-        <div>
-          <label>Degree: </label>
-          <input
-            type="number"
-            value={weightings.degree}
-            onChange={(e) => handleWeightChange(e, 'degree')}
-            className="border rounded px-2 mx-1"
-          />
-        </div>
-        <div>
-          <label>Country: </label>
-          <input
-            type="number"
-            value={weightings.country}
-            onChange={(e) => handleWeightChange(e, 'country')}
-            className="border rounded px-2 mx-1"
-          />
-        </div>
-        <div>
-          <label>Hobby: </label>
-          <input
-            type="number"
-            value={weightings.hobby}
-            onChange={(e) => handleWeightChange(e, 'hobby')}
-            className="border rounded px-2 mx-1"
-          />
-        </div>
-      </div>
+      <Card className="mb-4 p-4 max-w-lg w-full">
+        <CardHeader>
+          <CardTitle className="text-xl font-semibold">Set Weightings for Pairing</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <div>
+              <label className="block mb-2 text-sm font-medium">Language: </label>
+              <Select onValueChange={(value) => handleWeightChange('language', value)} value={weightings.language.toString()}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select language weight" />
+                </SelectTrigger>
+                <SelectContent>
+                  {weightOptions.map((option) => (
+                    <SelectItem key={option.value} value={option.value.toString()}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <label className="block mb-2 text-sm font-medium">Degree: </label>
+              <Select onValueChange={(value) => handleWeightChange('degree', value)} value={weightings.degree.toString()}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select degree weight" />
+                </SelectTrigger>
+                <SelectContent>
+                  {weightOptions.map((option) => (
+                    <SelectItem key={option.value} value={option.value.toString()}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <label className="block mb-2 text-sm font-medium">Country: </label>
+              <Select onValueChange={(value) => handleWeightChange('country', value)} value={weightings.country.toString()}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select country weight" />
+                </SelectTrigger>
+                <SelectContent>
+                  {weightOptions.map((option) => (
+                    <SelectItem key={option.value} value={option.value.toString()}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <label className="block mb-2 text-sm font-medium">Hobby: </label>
+              <Select onValueChange={(value) => handleWeightChange('hobby', value)} value={weightings.hobby.toString()}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select hobby weight" />
+                </SelectTrigger>
+                <SelectContent>
+                  {weightOptions.map((option) => (
+                    <SelectItem key={option.value} value={option.value.toString()}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {eventsData.events.map((event) => (
-          <div key={event.id} className="bg-white shadow-md rounded-lg p-4">
+          <Card key={event.id} className="shadow-md rounded-lg">
             <img
               src={`/img/${event.image}`}
               alt={event.title}
               className="w-full h-48 object-cover rounded-lg mb-2"
             />
-            <h2 className="text-xl font-semibold">{event.title}</h2>
-            <p className="text-gray-600">{event.description}</p>
-            <p className="text-gray-500">Duration: {event.time} minutes</p>
-            <button
-              onClick={(e) => pairWithBuddy(e, event)} 
-              className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
-            >
-              Pair me with a Buddy
-            </button>
-          </div>
+            <CardHeader>
+              <CardTitle className="text-xl font-semibold">{event.title}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-600">{event.description}</p>
+              <p className="text-gray-500">Duration: {event.time} minutes</p>
+            </CardContent>
+            <CardFooter className="flex justify-end">
+              <Button
+                onClick={(e) => pairWithBuddy(e, event)}
+                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
+              >
+                Pair me with a Buddy
+              </Button>
+            </CardFooter>
+          </Card>
         ))}
       </div>
     </div>
