@@ -4,6 +4,18 @@ import eventsData from '../../../_data/events.json';
 import { useRouter } from 'next/navigation';
 import usersData from '../../../_data/users.json';
 
+// Define the structure for the User type
+interface User {
+  username: string;
+  password: string;
+  questionnaire: {
+    language: string;
+    degree: string;
+    hobbies: string[];
+    country: string;
+  };
+}
+
 const EventsPage = () => {
   const router = useRouter();
 
@@ -14,46 +26,50 @@ const EventsPage = () => {
       alert("You need to be logged in to pair with a buddy!");
       return;
     }
-  
+
     // Get users from user data excluding the logged-in user
-    const potentialBuddies = usersData.users.filter(
-      (user) => user.username !== loggedInUser.username
+    const potentialBuddies: User[] = usersData.users.filter(
+      (user: User) => user.username !== loggedInUser.username
     );
-  
+
     // Function to calculate similarity score between two users
-    const calculateScore = (user: any) => {
+    const calculateScore = (user: User): number => {
       let score = 0;
-  
+
       // Give more weight to language and hobbies matches
       if (user.questionnaire.language === loggedInUser.questionnaire.language) score += 3;
       if (user.questionnaire.degree === loggedInUser.questionnaire.degree) score += 2;
       if (user.questionnaire.country === loggedInUser.questionnaire.country) score += 1;
       
       // Count matching hobbies
-      const commonHobbies = user.questionnaire.hobbies.filter((hobby: string) =>
+      const commonHobbies = user.questionnaire.hobbies.filter((hobby) =>
         loggedInUser.questionnaire.hobbies.includes(hobby)
       );
       score += commonHobbies.length * 2; // Give more weight to hobbies
-  
+
       return score;
     };
-  
+
     // Find the buddy with the highest score
     const bestBuddy = potentialBuddies.reduce((prev, current) => {
       const prevScore = calculateScore(prev);
       const currentScore = calculateScore(current);
       return currentScore > prevScore ? current : prev;
     }, potentialBuddies[0]);
-  
+
     if (bestBuddy) {
       // Store paired buddy in local storage and navigate to buddy's page
-      localStorage.setItem('pairedBuddy', JSON.stringify(bestBuddy));
+      const pairedBuddy = {
+        username: bestBuddy.username,
+        pairedUsername: loggedInUser.username, // Store the logged-in user as paired
+        questionnaire: bestBuddy.questionnaire,
+      };
+      localStorage.setItem('pairedBuddy', JSON.stringify(pairedBuddy));
       router.push('/buddy');
     } else {
       alert('No suitable buddy found.');
     }
   };
-  
 
   return (
     <div className="flex flex-col items-center justify-start h-screen pt-20">

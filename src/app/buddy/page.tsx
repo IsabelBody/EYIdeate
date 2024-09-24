@@ -24,8 +24,8 @@ const BuddyPage = () => {
       // Log to verify all required properties are present
       console.log('Retrieved buddy data:', buddy);
   
-      if (!buddy.id || !buddy.pairedId) {
-        console.error('Buddy data is missing id or pairedId:', buddy);
+      if (!buddy.username) { // Adjust this condition based on what properties you have
+        console.error('Buddy data is missing username:', buddy);
         alert('Buddy data is incomplete. Please re-pair.');
         router.push('/events');
       } else {
@@ -33,7 +33,6 @@ const BuddyPage = () => {
       }
     }
   }, [router]);
-  
 
   // Load chat messages in real-time
   useEffect(() => {
@@ -42,8 +41,8 @@ const BuddyPage = () => {
       const data = snapshot.val();
       if (data) {
         const filteredMessages = Object.values(data).filter((message: any) => 
-          (message.senderId === buddyData?.id && message.receiverId === buddyData?.pairedId) ||
-          (message.senderId === buddyData?.pairedId && message.receiverId === buddyData?.id)
+          (message.senderId === buddyData?.username && message.receiverId === buddyData?.pairedUsername) ||
+          (message.senderId === buddyData?.pairedUsername && message.receiverId === buddyData?.username)
         );
         setMessages(filteredMessages);
       }
@@ -52,23 +51,24 @@ const BuddyPage = () => {
 
   const sendMessage = async () => {
     if (newMessage.trim() === '') return;
-  
+
     // Check if buddyData is defined and has the required properties
-    if (!buddyData || !buddyData.id || !buddyData.pairedId) {
+    if (!buddyData || !buddyData.username) {
       console.error('Buddy data is missing necessary properties:', buddyData);
       return;
     }
-  
+
+    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || 'null');
     const messageData = {
       text: newMessage,
-      sender: buddyData.username || 'Anonymous',
-      senderId: buddyData.id, // Ensure you have this ID
-      receiverId: buddyData.pairedId, // Ensure you have this ID
+      sender: loggedInUser.username || 'Anonymous', // Use logged-in user's username
+      senderId: loggedInUser.username, // Store logged-in user's username
+      receiverId: buddyData.username, // Buddy's username as the receiver
       timestamp: Date.now(),
     };
-  
+
     console.log('Sending message data:', messageData); // Log the message data
-  
+
     try {
       // Push new message to the database
       await push(ref(realTimeDb, 'chats'), messageData);
@@ -77,7 +77,6 @@ const BuddyPage = () => {
       console.error('Error sending message:', error);
     }
   };
-  
 
   return (
     <div className="flex flex-col justify-center items-center min-h-screen p-4">
