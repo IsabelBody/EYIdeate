@@ -13,6 +13,7 @@ const BuddyPage = () => {
   const [buddyData, setBuddyData] = useState<any>(null);
   const [messages, setMessages] = useState<any[]>([]);
   const [newMessage, setNewMessage] = useState('');
+  const [prompts, setPrompts] = useState<string[]>([]);
 
   useEffect(() => {
     const pairedBuddy = localStorage.getItem('pairedBuddy');
@@ -74,7 +75,6 @@ const BuddyPage = () => {
     if (!buddyData) return [];
 
     const commonAttributes: string[] = [];
-
     const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || 'null');
 
     if (buddyData.questionnaire.language === loggedInUser.questionnaire.language) {
@@ -97,6 +97,38 @@ const BuddyPage = () => {
     return commonAttributes;
   };
 
+  // Fetch conversation prompts
+  const fetchPrompts = async () => {
+    try {
+      const response = await fetch('/api/generate-prompts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          language: buddyData?.questionnaire.language, // Use buddy's language
+          hobbies: buddyData?.questionnaire.hobbies // Use buddy's hobbies
+        }),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to fetch conversation prompts');
+      }
+  
+      const data = await response.json();
+      setPrompts(data.prompts); // Store prompts in state
+    } catch (error) {
+      console.error('Error fetching conversation prompts:', error);
+    }
+  };
+
+  // Trigger prompt fetching on buddyData load
+  useEffect(() => {
+    if (buddyData) {
+      fetchPrompts();
+    }
+  }, [buddyData]);
+
   return (
     <div className="flex flex-col justify-center items-center min-h-screen p-4">
       <Card className="w-full max-w-md mb-6">
@@ -110,42 +142,23 @@ const BuddyPage = () => {
         </CardContent>
       </Card>
 
-      {/* Display Common Attributes */}
+      {/* Display Prompts */}
       <Card className="w-full max-w-md mb-6">
         <CardHeader>
-          <CardTitle>Common Attributes</CardTitle>
+          <CardTitle>Conversation Prompts</CardTitle>
         </CardHeader>
         <CardContent>
-          {calculateCommonAttributes().length > 0 ? (
+          {prompts.length > 0 ? (
             <ul>
-              {calculateCommonAttributes().map((attribute, index) => (
-                <li key={index}>{attribute}</li>
+              {prompts.map((prompt, index) => (
+                <li key={index}>{prompt}</li>
               ))}
             </ul>
           ) : (
-            <p>No common attributes found.</p>
+            <p>Loading prompts...</p>
           )}
         </CardContent>
       </Card>
-
-      {/* Event Details Card */}
-      {buddyData?.event && (
-        <Card className="w-full max-w-md mb-6">
-          <CardHeader>
-            <CardTitle>Event Details</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <img
-              src={`/img/${buddyData.event.image}`}
-              alt={buddyData.event.title}
-              className="w-full h-48 object-cover rounded-lg mb-2"
-            />
-            <h2 className="text-xl font-semibold">{buddyData.event.title}</h2>
-            <p>{buddyData.event.description}</p>
-            <p className="text-gray-500">Duration: {buddyData.event.time} minutes</p>
-          </CardContent>
-        </Card>
-      )}
 
       {/* Chat UI */}
       <div className="w-full max-w-md mb-6">
