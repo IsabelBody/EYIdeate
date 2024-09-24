@@ -20,9 +20,20 @@ const BuddyPage = () => {
       alert('No buddy found.');
       router.push('/events');
     } else {
-      setBuddyData(JSON.parse(pairedBuddy));
+      const buddy = JSON.parse(pairedBuddy);
+      // Log to verify all required properties are present
+      console.log('Retrieved buddy data:', buddy);
+  
+      if (!buddy.id || !buddy.pairedId) {
+        console.error('Buddy data is missing id or pairedId:', buddy);
+        alert('Buddy data is incomplete. Please re-pair.');
+        router.push('/events');
+      } else {
+        setBuddyData(buddy);
+      }
     }
   }, [router]);
+  
 
   // Load chat messages in real-time
   useEffect(() => {
@@ -30,24 +41,43 @@ const BuddyPage = () => {
     onValue(chatRef, (snapshot) => {
       const data = snapshot.val();
       if (data) {
-        setMessages(Object.values(data));
+        const filteredMessages = Object.values(data).filter((message: any) => 
+          (message.senderId === buddyData?.id && message.receiverId === buddyData?.pairedId) ||
+          (message.senderId === buddyData?.pairedId && message.receiverId === buddyData?.id)
+        );
+        setMessages(filteredMessages);
       }
     });
-  }, []);
+  }, [buddyData]);
 
   const sendMessage = async () => {
     if (newMessage.trim() === '') return;
-
+  
+    // Check if buddyData is defined and has the required properties
+    if (!buddyData || !buddyData.id || !buddyData.pairedId) {
+      console.error('Buddy data is missing necessary properties:', buddyData);
+      return;
+    }
+  
     const messageData = {
       text: newMessage,
-      sender: buddyData?.username || 'Anonymous',
+      sender: buddyData.username || 'Anonymous',
+      senderId: buddyData.id, // Ensure you have this ID
+      receiverId: buddyData.pairedId, // Ensure you have this ID
       timestamp: Date.now(),
     };
-
-    // Push new message to the database
-    await push(ref(realTimeDb, 'chats'), messageData);
-    setNewMessage(''); // Clear input after sending
+  
+    console.log('Sending message data:', messageData); // Log the message data
+  
+    try {
+      // Push new message to the database
+      await push(ref(realTimeDb, 'chats'), messageData);
+      setNewMessage(''); // Clear input after sending
+    } catch (error) {
+      console.error('Error sending message:', error);
+    }
   };
+  
 
   return (
     <div className="flex flex-col justify-center items-center min-h-screen p-4">
