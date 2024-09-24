@@ -7,6 +7,7 @@ import "./globals.css";
 import Link from 'next/link'; // Import Link for navigation
 import { Button } from '@/components/ui/button'; // Import Button component
 import { useEffect, useState } from 'react'; // Import useEffect and useState
+import { cn } from '@/lib/utils'; // Utility function from shadcn for conditionally applying classes
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -18,7 +19,6 @@ const geistMono = localFont({
   variable: "--font-geist-mono",
   weight: "100 900",
 });
-
 
 export default function RootLayout({
   children,
@@ -42,14 +42,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <nav className="flex justify-between items-center p-4 bg-gray-800 text-white">
-          <h1 className="text-xl">UoA EventBuddy</h1>
+        <nav className="flex justify-between items-center p-4">
+          <Link href="/" className="text-2xl font-semibold text-black hover:text-gray-700 transition-all"> {/* Updated text styling */}
+            UoA EventBuddy
+          </Link>
           <div className="flex space-x-4">
             {loggedInUser ? (
               <>
                 <Link href="/profile">
                   <Button className="rounded-full p-3 bg-blue-500 text-white hover:bg-blue-600 transition">
-                    {/* Placeholder for profile icon */}
                     <span>👤</span>
                   </Button>
                 </Link>
