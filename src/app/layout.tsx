@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'; // Import Button component
 import { useEffect, useState } from 'react'; // Import useEffect and useState
 import { cn } from '@/lib/utils'; // Utility function from shadcn for conditionally applying classes
 import { UserProvider, useUserContext } from './UserContext'; // Import UserProvider
+import { FaUser } from 'react-icons/fa'; // Import the user icon
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -55,8 +56,8 @@ const UserConsumer = () => {
   return loggedInUser ? (
     <>
       <Link href="/profile">
-        <Button className="rounded-full p-3 bg-blue-500 text-white hover:bg-blue-600 transition">
-          <span>👤</span>
+        <Button className="rounded-full p-4 text-gray-700 hover:text-gray-500 transition bg-transparent text-3xl">
+          <FaUser />
         </Button>
       </Link>
       <Button
