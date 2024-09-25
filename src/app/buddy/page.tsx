@@ -262,7 +262,7 @@ const BuddyPage = () => {
       <div className="flex flex-col w-full max-w-2xl mb-6">
         <Card>
           <CardHeader>
-            <CardTitle>🤖 Chat with the AI</CardTitle>
+            <CardTitle>🤖 Let AI help you express yourself!</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="h-64 overflow-y-scroll border p-2 bg-gray-100 rounded">
