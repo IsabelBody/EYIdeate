@@ -1,11 +1,17 @@
+
+Made in 1 day. 
+
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
 
+Ensure you have Node.js installed. (download from online)  
+Make sure you do `npm install` to get all my packages.  
+
 First, run the development server:
 
-```bash
-npm run dev
+```npm run dev
 # or
 yarn dev
 # or
@@ -13,6 +19,9 @@ pnpm dev
 # or
 bun dev
 ```
+
+Run `json-server --watch _data/users.json --watch _data/events.json --port 4000` to run the servers to save user logins. 
+Ensure you have json-server installed if that fails -> `npm install -g json-server`. 
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
